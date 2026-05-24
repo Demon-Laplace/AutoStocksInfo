@@ -1,6 +1,8 @@
 .git/
 .codex/
 .agents/
+.tools/
+.gh-config/
 .env
 .env.*
 !.env.example
