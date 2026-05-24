@@ -4,6 +4,7 @@ import argparse
 import logging
 import os
 import sys
+from datetime import date, timedelta
 from typing import Any
 
 from pipeline.analyzer.dedupe import content_hash
@@ -53,7 +54,9 @@ def fetch_and_store_prices(config: AppConfig, db: DatabaseClient) -> list[dict[s
 
 def fetch_and_store_news(config: AppConfig, db: DatabaseClient) -> list[dict[str, Any]]:
     raw_items = fetch_rss_news(config.watchlist)
-    analyzed = analyze_news_items(raw_items, config.watchlist)
+    recent_items = [item for item in raw_items if is_recent_news_item(item, config.report_date)]
+    logger.info("Keeping %d RSS news items from the latest 3 report days", len(recent_items))
+    analyzed = analyze_news_items(recent_items, config.watchlist)
     records = [item.to_record() for item in analyzed]
     db.upsert_news_items(records)
     return records
@@ -98,6 +101,12 @@ def analyze_news_items(raw_items: list[RawNewsItem], watchlist: dict[str, Any]) 
         )
     logger.info("Analyzed %d relevant news items", len(analyzed))
     return analyzed
+
+
+def is_recent_news_item(raw_item: RawNewsItem, report_date: date) -> bool:
+    published_at = raw_item.published_at or raw_item.fetched_at
+    start_date = report_date - timedelta(days=2)
+    return start_date <= published_at.date() <= report_date
 
 
 def generate_and_store_report(

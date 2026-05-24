@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import type { NewsItem } from "../App";
+import type { LegacyNewsItem } from "../lib/types";
 
 interface NewsListProps {
-  news: NewsItem[];
+  news: LegacyNewsItem[];
 }
 
 function NewsList({ news }: NewsListProps) {

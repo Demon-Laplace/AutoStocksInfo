@@ -28,7 +28,8 @@ a:hover {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
@@ -70,7 +71,7 @@ button {
 }
 
 .content {
-  width: min(100%, 1120px);
+  width: min(100%, 1180px);
   margin: 0 auto;
   padding: 14px;
 }
@@ -82,7 +83,7 @@ button {
   left: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
   padding: 8px 12px 12px;
   border-top: 1px solid #dfe3e8;
@@ -96,6 +97,18 @@ button {
   border-radius: 8px;
   background: #ffffff;
   color: #18202a;
+}
+
+.text-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.primary-button {
+  border-color: #0f5e9c;
+  background: #0f5e9c;
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .bottom-nav button {
@@ -143,7 +156,11 @@ button {
 }
 
 .login-panel input,
-.filter-row select {
+.filter-row select,
+.auth-form input,
+.holding-form input,
+.holding-form select,
+.holding-form textarea {
   width: 100%;
   min-height: 42px;
   border: 1px solid #cfd6dd;
@@ -154,6 +171,19 @@ button {
 
 .login-panel input {
   padding: 8px 10px;
+}
+
+.auth-form input,
+.holding-form input,
+.holding-form select,
+.holding-form textarea {
+  margin-top: 6px;
+  padding: 8px 10px;
+}
+
+.holding-form textarea {
+  min-height: 88px;
+  resize: vertical;
 }
 
 .login-panel button {
@@ -265,9 +295,317 @@ button {
   gap: 10px;
 }
 
+.holdings-page {
+  display: grid;
+  gap: 12px;
+}
+
+.holdings-toolbar {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.holdings-toolbar p {
+  margin: 4px 0 0;
+}
+
+.auth-form,
+.holding-form {
+  display: grid;
+  gap: 12px;
+}
+
+.auth-form label,
+.holding-form label {
+  color: #475467;
+  font-size: 0.92rem;
+}
+
+.form-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+}
+
+.checkbox-label input {
+  width: auto;
+  min-height: auto;
+  margin: 0;
+}
+
+.toolbar-actions,
+.holding-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-actions {
+  flex-wrap: wrap;
+}
+
+.holding-actions {
+  justify-content: flex-end;
+}
+
+.holding-actions .text-button {
+  min-height: 30px;
+  padding: 4px 8px;
+}
+
 .news-card,
 .holding-card {
   padding: 14px;
+}
+
+.dashboard-page {
+  display: grid;
+  gap: 14px;
+}
+
+.dashboard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dashboard-toolbar h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.summary-item {
+  min-height: 86px;
+  padding: 16px;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.summary-item span,
+.section-heading span,
+.chart-readout small,
+.watchlist-table small,
+.watchlist-card small {
+  color: #667085;
+  font-size: 0.78rem;
+}
+
+.summary-item strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.dashboard-grid,
+.dashboard-left,
+.dashboard-right {
+  display: grid;
+  gap: 12px;
+}
+
+.section-heading,
+.stock-chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.section-heading h2,
+.stock-chart-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.watchlist-panel,
+.portfolio-chart-panel,
+.stock-chart-panel,
+.news-impact-panel {
+  padding: 14px;
+}
+
+.watchlist-table-wrap {
+  display: none;
+}
+
+.watchlist-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.watchlist-table th,
+.watchlist-table td {
+  padding: 10px 8px;
+  border-top: 1px solid #eef1f4;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.watchlist-table th {
+  color: #667085;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.watchlist-table tr.selected td {
+  background: #f3f8fc;
+}
+
+.watchlist-table td span,
+.watchlist-table td small {
+  display: block;
+}
+
+.ticker-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #0f5e9c;
+  font-weight: 800;
+}
+
+.watchlist-cards {
+  display: grid;
+  gap: 8px;
+}
+
+.watchlist-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 12px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: left;
+}
+
+.watchlist-card.selected {
+  border-color: #0f5e9c;
+  background: #f3f8fc;
+}
+
+.watchlist-card span {
+  min-width: 0;
+}
+
+.watchlist-card strong,
+.watchlist-card small {
+  display: block;
+}
+
+.watchlist-card-note {
+  grid-column: 1 / -1;
+  color: #667085;
+  font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stock-chart-panel {
+  min-width: 0;
+}
+
+.chart-readout {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  text-align: right;
+}
+
+.chart-readout strong {
+  font-size: 1.15rem;
+}
+
+.stock-chart-canvas {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  min-width: 0;
+}
+
+.stock-chart-canvas .empty-state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+}
+
+.range-selector {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.range-selector button {
+  min-height: 34px;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475467;
+  font-weight: 700;
+}
+
+.range-selector button.active {
+  border-color: #0f5e9c;
+  background: #e9f3fb;
+  color: #0c4778;
+}
+
+.portfolio-value-chart {
+  width: 100%;
+  height: 220px;
+}
+
+.impact-list {
+  display: grid;
+  gap: 10px;
+}
+
+.impact-item {
+  padding-top: 10px;
+  border-top: 1px solid #eef1f4;
+}
+
+.impact-item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.impact-item h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.impact-item p {
+  margin-bottom: 0;
+  color: #475467;
+  line-height: 1.5;
 }
 
 .news-card.impact-high {
@@ -348,6 +686,13 @@ button {
   color: #805a10;
 }
 
+.direction-neutral,
+.direction-unclear {
+  border-color: #cfd6dd;
+  background: #f7f9fb;
+  color: #475467;
+}
+
 .muted-badge {
   background: #f2f4f7;
 }
@@ -426,6 +771,39 @@ button {
 
   .filter-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+    align-items: start;
+  }
+
+  .watchlist-table-wrap {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .watchlist-cards {
+    display: none;
+  }
+
+  .holdings-toolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .auth-form {
+    grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto;
+    align-items: end;
+  }
+
+  .form-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: end;
   }
 
   .holding-grid {

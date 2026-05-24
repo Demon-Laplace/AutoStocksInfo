@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export type TabKey = "reports" | "news" | "holdings";
+export type TabKey = "dashboard" | "reports" | "news" | "holdings";
 
 interface LayoutProps {
   activeTab: TabKey;
@@ -9,6 +9,7 @@ interface LayoutProps {
 }
 
 const navItems: Array<{ key: TabKey; label: string }> = [
+  { key: "dashboard", label: "总览" },
   { key: "reports", label: "日报" },
   { key: "news", label: "新闻" },
   { key: "holdings", label: "持仓" },

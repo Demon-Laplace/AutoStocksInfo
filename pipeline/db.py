@@ -102,6 +102,7 @@ class DatabaseClient:
             return {"holdings": [], "prices": [], "news": [], "filings": []}
 
         client = self._require_client()
+        news_start = (report_date - timedelta(days=2)).isoformat()
         start = report_date.isoformat()
         end = (report_date + timedelta(days=1)).isoformat()
 
@@ -129,7 +130,7 @@ class DatabaseClient:
             client.table("news_items")
             .select("*")
             .eq("user_id", self.user_id)
-            .gte("published_at", f"{start}T00:00:00+00:00")
+            .gte("published_at", f"{news_start}T00:00:00+00:00")
             .lt("published_at", f"{end}T00:00:00+00:00")
             .order("published_at", desc=True)
             .execute()
@@ -148,4 +149,3 @@ class DatabaseClient:
             or []
         )
         return {"holdings": holdings, "prices": prices, "news": news, "filings": filings}
-

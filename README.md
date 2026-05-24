@@ -124,7 +124,9 @@ npm install
 npm run dev
 ```
 
-前端不要求登录。dashboard 使用 Supabase publishable/anon key 公开只读数据；写入仍只能由 Python pipeline 使用 service role key 完成。
+前端查看 dashboard 不要求登录，使用 Supabase publishable/anon key 公开只读数据。持仓页支持邮箱密码登录；登录后可以新增或修改当前用户自己的 `holdings` 记录。service role key 仍只用于 Python pipeline 和 GitHub Actions。
+
+Dashboard 总览页使用 `components/dashboard/` 下的拆分组件。它会优先读取新版 `stocks`、`portfolio_positions`、`price_history`、`news_items` 字段；如果这些表尚未迁移或没有数据，会回退到旧版 `holdings`、`price_snapshots`、`news_items`，再回退到前端 mock data。
 
 ## GitHub Actions
 
@@ -147,7 +149,7 @@ workflow 位于 `.github/workflows/daily-intel.yml`。它会每天 `06:30 UTC` �
 - 前端只能使用 `VITE_SUPABASE_ANON_KEY`，绝不能使用 service role key。
 - 所有业务表已启用 RLS。
 - anon 用户只有 select 权限，用于公开 dashboard。
-- authenticated 用户的 insert/update/delete policy 都限制为 `auth.uid() = user_id`。
+- authenticated 用户的 insert/update/delete policy 都限制为 `auth.uid() = user_id`，前端持仓编辑依赖这些 RLS policy。
 - service role 会绕过 RLS，用于定时任务写入。
 
 ## 后续扩展

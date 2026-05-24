@@ -1,4 +1,4 @@
-import type { DailyReport } from "../App";
+import type { DailyReport } from "../lib/types";
 
 interface ReportListProps {
   reports: DailyReport[];

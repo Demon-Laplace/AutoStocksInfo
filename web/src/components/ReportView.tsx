@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import type { DailyReport } from "../App";
+import type { DailyReport } from "../lib/types";
 
 interface ReportViewProps {
   report: DailyReport | null;
