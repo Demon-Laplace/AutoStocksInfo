@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "investment-intel"
+version = "0.1.0"
+description = "Personal investment intelligence daily report pipeline."
+requires-python = ">=3.11"
+dependencies = [
+  "requests>=2.31.0",
+  "pyyaml>=6.0.1",
+  "feedparser>=6.0.11",
+  "pandas>=2.2.0",
+  "python-dotenv>=1.0.1",
+  "supabase>=2.4.0",
+  "beautifulsoup4>=4.12.3",
+  "yfinance>=0.2.37"
+]
+
+[tool.setuptools.packages.find]
+include = ["pipeline*"]

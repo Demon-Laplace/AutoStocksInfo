@@ -1,0 +1,73 @@
+user:
+  default_user_id_env: SUPABASE_USER_ID
+
+holdings:
+  MU:
+    name: Micron Technology
+    market: US
+    position_type: holding
+    themes:
+      - HBM
+      - DRAM
+      - NAND
+      - AI infrastructure
+    related_tickers:
+      - NVDA
+      - AMD
+      - AVGO
+      - TSM
+      - WDC
+    related_entities:
+      - name: SK Hynix
+        type: foreign_company
+        importance: 5
+        note: HBM competitor and supply-demand benchmark
+      - name: Samsung Electronics
+        type: foreign_company
+        importance: 5
+        note: HBM competitor; qualification progress may affect MU
+    positive_keywords:
+      - HBM shortage
+      - DRAM price increase
+      - AI server demand
+      - Nvidia demand
+    negative_keywords:
+      - Samsung HBM approval
+      - memory oversupply
+      - capex slowdown
+      - inventory correction
+
+  IREN:
+    name: IREN
+    market: US
+    position_type: watchlist
+    themes:
+      - AI data center
+      - power contracts
+      - Bitcoin mining
+      - convertible debt
+    related_tickers:
+      - NVDA
+      - CORZ
+      - CIFR
+    related_entities:
+      - name: CoreWeave
+        type: private_company
+        importance: 4
+        note: AI data center demand benchmark
+    positive_keywords:
+      - AI cloud contract
+      - data center lease
+      - power capacity
+    negative_keywords:
+      - convertible debt
+      - dilution
+      - power cost
+      - Bitcoin decline
+
+news_sources:
+  rss:
+    - name: Yahoo Finance MU
+      url: https://finance.yahoo.com/rss/headline?s=MU
+    - name: Yahoo Finance NVDA
+      url: https://finance.yahoo.com/rss/headline?s=NVDA
