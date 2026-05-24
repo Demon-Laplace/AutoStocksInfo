@@ -5,7 +5,6 @@ export type TabKey = "reports" | "news" | "holdings";
 interface LayoutProps {
   activeTab: TabKey;
   onTabChange: (tab: TabKey) => void;
-  onSignOut: () => void;
   children: ReactNode;
 }
 
@@ -15,7 +14,7 @@ const navItems: Array<{ key: TabKey; label: string }> = [
   { key: "holdings", label: "持仓" },
 ];
 
-function Layout({ activeTab, onTabChange, onSignOut, children }: LayoutProps) {
+function Layout({ activeTab, onTabChange, children }: LayoutProps) {
   return (
     <div className="app-shell">
       <header className="top-bar">
@@ -23,9 +22,6 @@ function Layout({ activeTab, onTabChange, onSignOut, children }: LayoutProps) {
           <p className="eyebrow">Personal Intelligence</p>
           <h1>Investment Intel</h1>
         </div>
-        <button className="text-button" type="button" onClick={onSignOut}>
-          退出
-        </button>
       </header>
 
       <main className="content">{children}</main>

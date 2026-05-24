@@ -1,5 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
-import type { Session } from "@supabase/supabase-js";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "./lib/supabase";
 import Layout, { TabKey } from "./components/Layout";
 import ReportList from "./components/ReportList";
@@ -56,10 +55,6 @@ export interface PriceSnapshot {
 }
 
 function App() {
-  const [session, setSession] = useState<Session | null>(null);
-  const [authReady, setAuthReady] = useState(false);
-  const [email, setEmail] = useState("");
-  const [authMessage, setAuthMessage] = useState("");
   const [activeTab, setActiveTab] = useState<TabKey>("reports");
   const [reports, setReports] = useState<DailyReport[]>([]);
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -70,24 +65,8 @@ function App() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setAuthReady(true);
-    });
-
-    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      setSession(nextSession);
-    });
-
-    return () => data.subscription.unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (!session) {
-      return;
-    }
     void loadData();
-  }, [session]);
+  }, []);
 
   const selectedReport = useMemo(
     () => reports.find((report) => report.id === selectedReportId) ?? reports[0] ?? null,
@@ -135,58 +114,8 @@ function App() {
     }
   }
 
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setAuthMessage("");
-    setError("");
-    const { error: signInError } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: window.location.origin },
-    });
-    if (signInError) {
-      setError(signInError.message);
-      return;
-    }
-    setAuthMessage("登录链接已发送，请检查邮箱。");
-  }
-
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    setReports([]);
-    setNews([]);
-    setHoldings([]);
-    setPrices([]);
-    setSelectedReportId(null);
-  }
-
-  if (!authReady) {
-    return <main className="centered">加载中...</main>;
-  }
-
-  if (!session) {
-    return (
-      <main className="login-page">
-        <form className="login-panel" onSubmit={handleLogin}>
-          <h1>Investment Intel</h1>
-          <label htmlFor="email">邮箱</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            autoComplete="email"
-            required
-          />
-          <button type="submit">发送登录链接</button>
-          {authMessage && <p className="success-text">{authMessage}</p>}
-          {error && <p className="error-text">{error}</p>}
-        </form>
-      </main>
-    );
-  }
-
   return (
-    <Layout activeTab={activeTab} onTabChange={setActiveTab} onSignOut={handleSignOut}>
+    <Layout activeTab={activeTab} onTabChange={setActiveTab}>
       {error && <p className="error-text">{error}</p>}
       {loading && <p className="muted">正在读取最新数据...</p>}
 
