@@ -27,6 +27,14 @@ export const mockDashboardData: DashboardData = {
       daily_change: index % 2 === 0 ? 1.2 + index * 0.4 : -0.8 - index * 0.2,
       total_return: averageCost ? ((price - averageCost) / averageCost) * 100 : null,
       notes: index === 0 ? "核心消费科技持仓，关注服务收入和回购。" : "观察估值、增长和行业周期。",
+      pe_ratio: 21 + index * 6,
+      options_trend:
+        index % 3 === 0
+          ? "call activity leading; C/P volume 1.38, C/P OI 1.08"
+          : index % 3 === 1
+            ? "call and put activity balanced; C/P volume 0.96, C/P OI 1.02"
+            : "put activity leading; C/P volume 0.72, C/P OI 0.88",
+      rsi: 42 + index * 7,
     };
   }),
   pricesByTicker: Object.fromEntries(
@@ -53,6 +61,16 @@ function buildPriceHistory(ticker: string, base: number, offset: number): PriceP
       low: round(close * 0.988),
       close,
       volume: 3_000_000 + offset * 500_000 + index * 1_000,
+      pe_ratio: index === 0 ? 21 + offset * 6 : null,
+      options_trend:
+        index === 0
+          ? offset % 3 === 0
+            ? "call activity leading; C/P volume 1.38, C/P OI 1.08"
+            : offset % 3 === 1
+              ? "call and put activity balanced; C/P volume 0.96, C/P OI 1.02"
+              : "put activity leading; C/P volume 0.72, C/P OI 0.88"
+          : null,
+      rsi: round(42 + offset * 7 + Math.sin((360 - index) / 21) * 6),
     });
   }
   return points;

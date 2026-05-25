@@ -31,6 +31,9 @@ class PriceSnapshot:
     change_pct: float | None
     volume: float | None
     source: str
+    pe_ratio: float | None = None
+    options_trend: str | None = None
+    rsi: float | None = None
 
     def to_record(self) -> dict[str, Any]:
         return dataclass_to_record(self)
@@ -100,4 +103,3 @@ class SecFiling:
 
     def to_record(self) -> dict[str, Any]:
         return dataclass_to_record(self)
-

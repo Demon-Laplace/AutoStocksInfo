@@ -142,18 +142,27 @@ function StockPriceChart({ ticker, points, range, onRangeChange }: StockPriceCha
 }
 
 function filterPoints(points: PricePoint[], range: TimeRange) {
-  if (range === "MAX") return points;
+  const normalizedPoints = normalizePoints(points);
+  if (range === "MAX") return normalizedPoints;
   const daysByRange: Record<Exclude<TimeRange, "MAX">, number> = {
     "1W": 7,
     "1M": 31,
     "6M": 183,
     "1Y": 365,
   };
-  const latest = points[points.length - 1]?.date;
+  const latest = normalizedPoints[normalizedPoints.length - 1]?.date;
   if (!latest) return [];
   const start = new Date(latest);
   start.setDate(start.getDate() - daysByRange[range]);
-  return points.filter((point) => new Date(point.date) >= start);
+  return normalizedPoints.filter((point) => new Date(point.date) >= start);
+}
+
+function normalizePoints(points: PricePoint[]) {
+  const byDate = new Map<string, PricePoint>();
+  for (const point of points) {
+    byDate.set(point.date, point);
+  }
+  return Array.from(byDate.values()).sort((left, right) => left.date.localeCompare(right.date));
 }
 
 function getPriceFromSeriesData(data: unknown) {

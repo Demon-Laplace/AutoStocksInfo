@@ -30,8 +30,6 @@ function WatchlistTable({ positions, selectedTicker, onSelect }: WatchlistTableP
           <thead>
             <tr>
               <th>Ticker</th>
-              <th>Company</th>
-              <th>Market</th>
               <th>Type</th>
               <th>Shares</th>
               <th>Avg</th>
@@ -48,11 +46,6 @@ function WatchlistTable({ positions, selectedTicker, onSelect }: WatchlistTableP
                     {position.ticker}
                   </button>
                 </td>
-                <td>
-                  <span>{position.company_name}</span>
-                  {position.sector && <small>{position.sector}</small>}
-                </td>
-                <td>{position.market}</td>
                 <td>{position.position_type === "holding" ? "持仓" : "观察"}</td>
                 <td>{position.shares || "-"}</td>
                 <td>{formatCurrency(position.average_cost)}</td>

@@ -19,6 +19,8 @@ interface StockRow {
   market: string | null;
   sector: string | null;
   currency: string | null;
+  pe_ratio?: number | null;
+  options_trend?: string | null;
 }
 
 interface PositionRow {
@@ -42,6 +44,9 @@ interface PriceHistoryRow {
   low: number | null;
   close: number | null;
   volume: number | null;
+  pe_ratio?: number | null;
+  options_trend?: string | null;
+  rsi?: number | null;
 }
 
 interface NewsRow {
@@ -93,25 +98,6 @@ async function fetchStructuredDashboardData(): Promise<DashboardData | null> {
   }
 
   const stockByTicker = new Map(stocks.map((stock) => [stock.ticker, stock]));
-  const normalizedPositions = positions.map((position): PortfolioPosition => {
-    const stock = stockByTicker.get(position.ticker);
-    return {
-      id: position.id,
-      stock_id: position.stock_id,
-      ticker: position.ticker,
-      company_name: stock?.company_name || position.ticker,
-      market: stock?.market || "US",
-      sector: stock?.sector ?? null,
-      position_type: toPositionType(position.position_type),
-      shares: Number(position.shares ?? 0),
-      average_cost: toNumberOrNull(position.average_cost),
-      current_price: toNumberOrNull(position.current_price),
-      daily_change: toNumberOrNull(position.daily_change),
-      total_return: toNumberOrNull(position.total_return),
-      notes: position.notes,
-    };
-  });
-
   const pricesByTicker = groupByTicker(
     prices.flatMap((point): PricePoint[] =>
       point.close == null
@@ -125,10 +111,37 @@ async function fetchStructuredDashboardData(): Promise<DashboardData | null> {
               low: toNumberOrNull(point.low),
               close: Number(point.close),
               volume: toNumberOrNull(point.volume),
+              pe_ratio: toNumberOrNull(point.pe_ratio),
+              options_trend: point.options_trend ?? null,
+              rsi: toNumberOrNull(point.rsi),
             },
           ],
     ),
   );
+  const latestPriceByTicker = latestPointByTicker(pricesByTicker);
+
+  const normalizedPositions = positions.map((position): PortfolioPosition => {
+    const stock = stockByTicker.get(position.ticker);
+    const latestPrice = latestPriceByTicker.get(position.ticker);
+    return {
+      id: position.id,
+      stock_id: position.stock_id,
+      ticker: position.ticker,
+      company_name: stock?.company_name || position.ticker,
+      market: stock?.market || "US",
+      sector: stock?.sector ?? null,
+      position_type: toPositionType(position.position_type),
+      shares: Number(position.shares ?? 0),
+      average_cost: toNumberOrNull(position.average_cost),
+      current_price: toNumberOrNull(position.current_price) ?? latestPrice?.close ?? null,
+      daily_change: toNumberOrNull(position.daily_change),
+      total_return: toNumberOrNull(position.total_return),
+      notes: position.notes,
+      pe_ratio: toNumberOrNull(stock?.pe_ratio) ?? latestPrice?.pe_ratio ?? null,
+      options_trend: stock?.options_trend ?? latestPrice?.options_trend ?? null,
+      rsi: latestPrice?.rsi ?? null,
+    };
+  });
 
   return {
     positions: normalizedPositions,
@@ -183,6 +196,9 @@ async function fetchLegacyDashboardData(): Promise<DashboardData | null> {
       daily_change: latestPrice?.change_pct ?? null,
       total_return: null,
       notes: holding.note,
+      pe_ratio: toNumberOrNull(latestPrice?.pe_ratio),
+      options_trend: latestPrice?.options_trend ?? null,
+      rsi: toNumberOrNull(latestPrice?.rsi),
     };
   });
 
@@ -199,6 +215,9 @@ async function fetchLegacyDashboardData(): Promise<DashboardData | null> {
               low: null,
               close: price.close,
               volume: price.volume,
+              pe_ratio: toNumberOrNull(price.pe_ratio),
+              options_trend: price.options_trend ?? null,
+              rsi: toNumberOrNull(price.rsi),
             },
           ],
     ),
@@ -234,6 +253,17 @@ function groupByTicker(points: PricePoint[]) {
     grouped[point.ticker] = [...(grouped[point.ticker] ?? []), point];
   }
   return grouped;
+}
+
+function latestPointByTicker(pricesByTicker: Record<string, PricePoint[]>) {
+  const latest = new Map<string, PricePoint>();
+  for (const [ticker, points] of Object.entries(pricesByTicker)) {
+    const point = points[points.length - 1];
+    if (point) {
+      latest.set(ticker, point);
+    }
+  }
+  return latest;
 }
 
 function groupNews(items: NewsItem[]) {
@@ -288,6 +318,6 @@ function impactLevelToScore(level: string, direction: string) {
   return direction === "negative" ? -magnitude : direction === "positive" ? magnitude : 0;
 }
 
-function toNumberOrNull(value: number | null) {
+function toNumberOrNull(value: number | null | undefined) {
   return value == null ? null : Number(value);
 }

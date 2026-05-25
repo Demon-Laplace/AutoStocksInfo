@@ -27,6 +27,9 @@ export interface PortfolioPosition {
   daily_change: number | null;
   total_return: number | null;
   notes: string | null;
+  pe_ratio: number | null;
+  options_trend: string | null;
+  rsi: number | null;
 }
 
 export interface PricePoint {
@@ -37,6 +40,9 @@ export interface PricePoint {
   low: number | null;
   close: number;
   volume: number | null;
+  pe_ratio: number | null;
+  options_trend: string | null;
+  rsi: number | null;
 }
 
 export interface NewsItem {
@@ -120,4 +126,7 @@ export interface LegacyPriceSnapshot {
   change_pct: number | null;
   volume: number | null;
   source: string | null;
+  pe_ratio?: number | null;
+  options_trend?: string | null;
+  rsi?: number | null;
 }

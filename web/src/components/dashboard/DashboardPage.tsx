@@ -3,6 +3,7 @@ import type { DashboardData, TimeRange } from "../../lib/types";
 import PortfolioSummary from "./PortfolioSummary";
 import PortfolioValueChart from "./PortfolioValueChart";
 import StockPriceChart from "./StockPriceChart";
+import StockIndicatorsPanel from "./StockIndicatorsPanel";
 import WatchlistTable from "./WatchlistTable";
 import NewsImpactPanel from "./NewsImpactPanel";
 
@@ -62,6 +63,12 @@ function DashboardPage({ data, onManageHoldings }: DashboardPageProps) {
             points={selectedPrices}
             range={range}
             onRangeChange={setRange}
+          />
+          <StockIndicatorsPanel
+            ticker={selectedPosition?.ticker ?? selectedTicker}
+            position={selectedPosition}
+            prices={selectedPrices}
+            news={selectedNews}
           />
           <NewsImpactPanel ticker={selectedTicker} news={selectedNews} />
         </div>

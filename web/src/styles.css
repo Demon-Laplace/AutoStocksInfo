@@ -439,6 +439,7 @@ button {
 .watchlist-panel,
 .portfolio-chart-panel,
 .stock-chart-panel,
+.stock-indicators-panel,
 .news-impact-panel {
   padding: 14px;
 }
@@ -574,6 +575,34 @@ button {
   border-color: #0f5e9c;
   background: #e9f3fb;
   color: #0c4778;
+}
+
+.stock-indicator-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border-top: 1px solid #eef1f4;
+}
+
+.stock-indicator-item {
+  min-width: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid #eef1f4;
+}
+
+.stock-indicator-item span,
+.stock-indicator-item small {
+  display: block;
+  color: #667085;
+  font-size: 0.78rem;
+}
+
+.stock-indicator-item strong {
+  display: block;
+  margin: 5px 0 3px;
+  font-size: 1rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .portfolio-value-chart {
@@ -775,6 +804,11 @@ button {
 
   .summary-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .stock-indicator-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 18px;
   }
 
   .dashboard-grid {
